@@ -1,1 +1,129 @@
-Hello All!!
+<div class="docs-inner">
+          <h3 class="title  text-center">Movie review app </h3>
+            <p>
+               Lets build a Movie review app with features like authentication, authorization 
+               combining features of picture uploading and DB associations.
+               
+               We will wrap this tutorial by enhancing the look and feel of our app with a CSS framework.
+            </p><br/><br/>
+            <p>
+                Start off creating a workspace from your Cloud9 dashboard. 
+            <dl>
+                <dt>Step 1: Create a model for Movies </dt>
+                <dd> 
+                    <pre>
+rails generate model Movie name:string description:text releasedate:date
+                    </pre> <br/>
+                    <pre>
+rake db:migrate
+                    </pre> <br/>
+                </dd><br/>
+                <dt>Step 2: Create a model for Categories </dt>
+                <dd> 
+                    <pre>
+rails generate model Category category_name:string
+                    </pre> <br/>
+                    <pre>
+rake db:migrate
+                    </pre> <br/>
+                </dd><br/>
+               <dt>Step 3: Create a model for Comments </dt>
+                <dd> 
+                    <pre>
+rails generate model Comment comment_body:string movie_id:integer
+                    </pre> <br/>
+                    <pre>
+rake db:migrate
+                    </pre> <br/>
+                </dd>
+                <br/>
+            </dl>
+            <p> With this our base tables are created. We will now start adding relations between the models</p>
+            <dl>
+                <dt>Step 4: Update the comments model with association </dt>
+                <dd> <br/> Modify the comments model file to look like below:
+                <br/> <i> app/models/comment.rb</i>
+                    <pre>
+class Comment < ActiveRecord::Base
+    belongs_to :movie
+end
+                    </pre> Save the file. <br/><br/>
+                </dd><br/>
+                <dt>Step 5: Update the movies model with association </dt>
+                <dd> <br/> Modify the movies model file to look like below:
+                <br/> <i> app/models/movie.rb</i>
+                    <pre>
+class Movie < ActiveRecord::Base
+    has_many :comments
+end
+                    </pre> Save the file. <br/>
+                </dd><br/>
+              </dl>
+              <p> We can enter the `rails console`  as shown in the video and verify the tables and their associations<br/>
+              We can now add associations for category and movie models as well.
+              </p>
+              <dl>
+              <dt>Step 6: Create a new model named Categorizations </dt>
+                <dd> <br/> Modify the categorization model file to look like below:
+                <br/> <i> app/models/categorization.rb</i>
+                    <pre>
+rails generate model Categorization category_id:integer movie_id:integer
+                    </pre> <br/>This will create a migration script. <br/>
+                    Since we want this table to just hold the associations between movies and categories, we will create this table without its id.<br/>
+                    To do this, we need to edit the migration file to look like below:
+                    <i>db/migrate/2015XXXXXXXX_create_categorizations.rb</i>
+                   <pre>
+class CreateCategorizations < ActiveRecord::Migration
+  def change
+    create_table :categorizations, :id => false do |t|
+      t.integer :category_id
+      t.integer :movie_id
+
+      t.timestamps
+    end
+  end
+end
+                   </pre><br/> Note that we add the :id => false clause here. 
+                   <br/>
+                    <pre>
+rake db:migrate
+                    </pre> <br/>
+                </dd><br/>
+                <dt>Step 7: Update the model with associations</dt>
+                <dd> <br/> Modify the categorization model file to look like below:
+                <br/> <i> app/models/categorization.rb</i>
+                    <pre>
+class Categorization < ActiveRecord::Base
+    belongs_to :movie
+    belongs_to :category
+end
+
+                    </pre> Save the file. <br/><br/>
+                </dd><br/>
+                <dt>Step 8: Update the movies model with association </dt>
+                <dd> <br/> Modify the movies model file to look like below:
+                <br/> <i> app/models/movie.rb</i>
+                    <pre>
+class Movie < ActiveRecord::Base
+    has_many :comments
+    has_many :categorizations
+    has_many :categories, through: :categorizations
+end
+                    </pre> Save the file. <br/><br/>
+                </dd><br/>
+                <dt>Step 9: Update the categories model with association </dt>
+                <dd> <br/> Modify the category model file to look like below:
+                <br/> <i> app/models/category.rb</i>
+                    <pre>
+class Category < ActiveRecord::Base
+    has_many :categorizations
+    has_many :movies, through: :categorizations
+end
+                    </pre> Save the file. <br/>
+                </dd><br/>Your workspace should look similar to the code present here: <a href="https://github.com/sudhakarg/moviereviewapp/tree/tables_associations">https://github.com/sudhakarg/moviereviewapp/tree/tables_associations</a>
+                <br/><br/>
+                <p> You can now try to create few categories, movies and associate them by creating categorizations as shown in the video</p><br/>
+                
+                
+              </dl>
+           </div>

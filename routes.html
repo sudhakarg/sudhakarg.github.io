@@ -1,0 +1,89 @@
+<div class="docs-inner">
+          <h3 class="title  text-center">Movie review app </h3>
+            <p>In the previous lab, we have finished creating models and add the required associations.<br/>
+               In this lab we will implement few custom routes which will help the app to evolve.
+            </p><br/>
+            <p>
+                
+                We will now start creating some views.
+            <dl>
+                <dt>Step 1: Generate scaffold for Movie </dt>
+                <dd> 
+                    <pre>
+rails generate scaffold Movie name:string description:text releasedate:date
+                    </pre> <br/> 
+                    Since we created the model already, rails engine will complain that a model already exists. We will tell it to reuse the existing model.
+                    <br/> To do that, enter 'n' when prompted like below.
+                   <img src="images/scaffold.jpg" width="100%" alt=""> <br/>
+                </dd><br/>
+               <dt>Step 2: Start your rails server </dt>
+                <dd> 
+                   <img src="images/start_server.jpg" width="100%" alt=""> <br/>
+                </dd><br/>
+                You can access your C9 url once the server is up and running.
+              </dl>
+              <br/>
+              Now lets create a route to access the content of categories table.
+              <dt> Step 3: Generate a controller for Categories</dt>
+              <dd> 
+                    <pre>
+rails generate controller categories
+                    </pre> <br/> 
+                    This will create categories_controller.rb file in app/controllers directory and also a folder named 'categories' in app/views folder.
+                    <br/><br/>
+               </dd>
+               <dt> Step 4: Add index method in categories controller</dt>
+              <dd> Modify the controller file to look like below:
+              <br/><i>app/controllers/categories_controller.rb</i>
+                    <pre>
+class CategoriesController < ApplicationController
+    def index
+       @categories = Category.all
+    end
+end
+                    </pre> <br/> 
+                    <br/>
+               </dd>
+              <dt> Step 5: Add route in routes.rb</dt>
+              <dd> Add the following line in the routes file:
+              <br/><i>app/config/routes.rb</i>
+                    <pre>
+get 'categories/' => 'categories#index'
+                    </pre> <br/> 
+                    <br/>
+               </dd>
+               <dt> Step 6: Create view file for category</dt>
+              <dd> Create a file index.html.erb in app/views/categories with the following content:
+              <br/><i>app/views/categories/index.html.erb</i>
+                    <pre>
+&lt;h1&gt;Listing Categories&lt;/h1&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Category&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;% @categories.each do |category| %&gt;
+      &lt;tr&gt;
+        &lt;td&gt;&lt;%= category.category_name %&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;% end %&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+
+                    </pre> <br/> 
+                    <br/>
+               </dd>
+               <dt> Step 7: You can verify that the new route is created with rake routes</dt>
+              <dd> 
+              <br/>
+                    <pre>
+rake routes
+                    </pre> <br/> 
+                    <img src="images/routes.jpg" width="100%" alt=""> <br/>
+                    <br/>
+               </dd>Lets now add hyperlinks for each of the category to display their movies
+               
+           </div>
